@@ -6,8 +6,7 @@
           class="input"
           type="text"
           v-model="query"
-          @input="searchPeoples"
-          placeholder="Filter by userId..."
+          placeholder="Filter by name..."
         />
 
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -16,29 +15,45 @@
           />
         </svg>
       </div>
-      <vList :items="dataStore.data" />
+      <vList :items="filteredItems" />
     </div>
   </div>
 </template>
 <script setup>
 import vList from "@/components/v-list.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useDataStore } from "./store/data.js";
-
 const query = ref("");
 const dataStore = useDataStore();
-const timerSearch = ref(null);
+let usersf = ref([]);
 
-const searchPeoples = () => {
-  clearTimeout(timerSearch.value);
-  timerSearch.value = setTimeout(() => {
-    dataStore.searchUsers(query.value);
-  }, 400);
-};
+// const filteredUsers = computed(() =>
+//   usersf.value.filter((user) => user.name.indexOf(query.value))
+// );
+
+// console.log("ff", usersf);
+// const getUser = async () => {
+//   usersf.value = await dataStore.users;
+// };
+
+// console.log("getUser", getUser);
+
+const filteredItems = computed(() => {
+  const querysearch = query.value.toLowerCase();
+  return usersf.value.filter((item) => item.name.toLowerCase().includes(querysearch));
+});
+
+console.log(filteredItems);
 
 onMounted(() => {
   dataStore.getUsers();
+  const getUser = async () => {
+    usersf.value = await dataStore.users;
+  };
+  console.log("getUser", getUser);
+
   dataStore.getData();
+  console.log("data", dataStore.getUsers());
 });
 </script>
 

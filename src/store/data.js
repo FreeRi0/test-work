@@ -37,7 +37,7 @@ export const useDataStore = defineStore("data", {
             }
           );
           this.data = responseData.data;
-        }, 100);
+        }, 1000);
       } catch (error) {
         console.log("an error occured " + error);
       }
