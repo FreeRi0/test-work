@@ -43,17 +43,5 @@ export const useDataStore = defineStore("data", {
         console.log("an error occured " + error);
       }
     },
-
-    async searchUsers(query) {
-      const searchUsersResponse = await axios.get(
-        `https://jsonplaceholder.typicode.com/posts?userId=${query}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      this.data = searchUsersResponse.data;
-    },
   },
 });

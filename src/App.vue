@@ -25,19 +25,17 @@ import { ref, onMounted, computed } from "vue";
 import { useDataStore } from "./store/data.js";
 const query = ref("");
 const dataStore = useDataStore();
-let usersf = ref([]);
+let users = ref([]);
 let posts = ref([]);
 const filteredItems = computed(() => {
   let str = query.value;
   let result = [];
-  let res = usersf.value.filter((x) => x.name.includes(str));
-  console.log(str, res.length);
+  let res = users.value.filter((x) => x.name.includes(str));
   if (query.value.length !== 0) {
     res.forEach((user) => {
       result = posts.value.filter((item) => item.userId == user.id);
     });
   } else {
-    console.log("postssres", result);
     result = posts.value;
   }
   return result;
@@ -46,9 +44,8 @@ const filteredItems = computed(() => {
 onMounted(() => {
   const func = async () => {
     try {
-      usersf.value = await dataStore.getUsers();
+      users.value = await dataStore.getUsers();
       posts.value = await dataStore.getData();
-      console.log("USER", usersf.value);
     } catch (error) {
       console.log("error", error);
     }
