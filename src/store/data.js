@@ -8,7 +8,7 @@ export const useDataStore = defineStore("data", {
   }),
   actions: {
     async getUsers() {
-      if (this.users.length > 0) return false;
+
       try {
         const responseUsers = await axios.get(
           "https://jsonplaceholder.typicode.com/users",
@@ -19,15 +19,16 @@ export const useDataStore = defineStore("data", {
           }
         );
         this.users = responseUsers.data;
+        console.log('users', this.users);
+        return this.users;
       } catch (error) {
         console.log("an error occured " + error);
       }
     },
 
     async getData() {
-      if (this.data.length > 0) return false;
+
       try {
-        setTimeout(async () => {
           const responseData = await axios.get(
             "https://jsonplaceholder.typicode.com/posts",
             {
@@ -37,7 +38,7 @@ export const useDataStore = defineStore("data", {
             }
           );
           this.data = responseData.data;
-        }, 1000);
+          return this.data;
       } catch (error) {
         console.log("an error occured " + error);
       }

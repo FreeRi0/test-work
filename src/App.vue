@@ -21,39 +21,39 @@
 </template>
 <script setup>
 import vList from "@/components/v-list.vue";
-import { onMounted, ref, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useDataStore } from "./store/data.js";
 const query = ref("");
 const dataStore = useDataStore();
 let usersf = ref([]);
-
-// const filteredUsers = computed(() =>
-//   usersf.value.filter((user) => user.name.indexOf(query.value))
-// );
-
-// console.log("ff", usersf);
-// const getUser = async () => {
-//   usersf.value = await dataStore.users;
-// };
-
-// console.log("getUser", getUser);
-
+let posts = ref([]);
 const filteredItems = computed(() => {
-  const querysearch = query.value.toLowerCase();
-  return usersf.value.filter((item) => item.name.toLowerCase().includes(querysearch));
+  let str = query.value;
+  let result = [];
+  let res = usersf.value.filter((x) => x.name.includes(str));
+  console.log(str, res.length);
+  if (query.value.length !== 0) {
+    res.forEach((user) => {
+      result = posts.value.filter((item) => item.userId == user.id);
+    });
+  } else {
+    console.log("postssres", result);
+    result = posts.value;
+  }
+  return result;
 });
 
-console.log(filteredItems);
-
 onMounted(() => {
-  dataStore.getUsers();
-  const getUser = async () => {
-    usersf.value = await dataStore.users;
+  const func = async () => {
+    try {
+      usersf.value = await dataStore.getUsers();
+      posts.value = await dataStore.getData();
+      console.log("USER", usersf.value);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
-  console.log("getUser", getUser);
-
-  dataStore.getData();
-  console.log("data", dataStore.getUsers());
+  func();
 });
 </script>
 
